@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+	<head>
+		<title>lines</title>
+	</head>
+	<body>
+		<canvas id="mycanvas" width="500" height="500"></canvas>
+	<script type="text/javascript">
+		window.onload = function()
+		{
+			var canvas = document.getElementById("mycanvas");
+			var context = canvas.getContext('2d');
+			context.lineCap = "round";
+			context.lineWidth = 5;
+			 
+			context.beginPath();
+			context.moveTo(0, 0);
+		    context.lineTo(50, 50);
+		    context.strokeStyle = "#000000";
+		    context.stroke();
+		    context.closePath();
+		    
+		    //context.arc(centerX, centerY, radius, startingAngle, endingAngle, antiClockwise);
+		    context.beginPath();
+		    context.arc(100, 100, 10, 0 * Math.PI, 2 * Math.PI, false);
+			context.strokeStyle = "#ff0000";
+		    context.stroke();
+		    context.closePath();
+		    
+		    //context.arcTo(controlX,controlY,endX,endY,radius);
+		    context.beginPath();
+		    context.moveTo(50, 400);
+		    context.lineTo(180, 400);
+		    context.arcTo(200, 400, 200, 450, 25);
+		    context.lineTo(200, 480);
+		    context.strokeStyle = "#00ffff";
+		    context.stroke();
+		    context.closePath();
+			
+			//context.quadraticCurveTo(controlX, controlY, endX, endY);
+			context.beginPath();
+			context.moveTo(200, 200);
+			context.quadraticCurveTo(300, 100, 400, 200);
+			context.strokeStyle = "#ffff00";
+			context.stroke();
+			context.closePath();
+			
+			//context.bezierCurveTo(controlX1, controlY1, controlX2, controlY2, endX, endY);
+			context.beginPath();
+			context.moveTo(200, 50);
+			context.bezierCurveTo(50, 200, 400, 200, 300, 50);
+			context.strokeStyle = "#ff00ff";
+			context.stroke();
+			context.closePath();
+		}
+	</script>
+	</body>
+	
+	<a href="index.html">Voltar</a>
+</html>

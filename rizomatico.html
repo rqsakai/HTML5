@@ -1,0 +1,139 @@
+<html>
+<head>
+	<title>teste canvas</title>
+</head>
+<body>
+	<canvas id="myCanvas" width="1024" height="786" style="border: 1px solid black;">
+	</canvas>
+<script type="text/javascript" src="kineticJs.js"></script>
+<script type="text/javascript">
+    window.onload = function(){
+    	//start
+    	initProject()
+    	// inicializar
+    	function initProject(){
+    		//inicializar canvas
+			var canvas = document.getElementById("myCanvas");
+		    var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+		    circles = [];
+		    var offsetX = 0;
+		    var offsetY = 0;
+		    for (var n = 0; n < 6; n++) {
+		    	var maxx = canvas.width;
+		    	var maxy = canvas.height;
+		    	posibilidadesx = maxx  - 60;
+		    	posibilidadesy = maxy - 60;
+		        var varx = 60 + Math.random() * ( posibilidadesx - 60);  
+		        var vary = 60 + Math.random() * ( posibilidadesy - 60);  
+		        //alert("x:"+varx+", y:"+vary);
+		        circles.push({
+		            x: varx,
+		            y: vary,
+		            radius: 30,
+		            color: colors[n],
+		            dragging: false
+		        });
+		    }
+    		DrawStageCircles();
+        	hitTestObject();	
+    	}
+       	//desenhar ciculos
+ 		function DrawStageCircles() {
+		    //inicia desnho
+ 			kin = new Kinetic("myCanvas", "2d");
+        	var context = kin.getContext();
+        
+	        context.globalCompositeOperation = "destination-over";
+	        kin.setDrawStage(function(){
+	            kin.clear();
+	            var mousePos = kin.getMousePos();
+	 
+	            for (var n = 0; n < circles.length; n++) {
+	                var thisRect = circles[n];
+	                var imageObj = new Image();
+	                if (thisRect.dragging) {
+	                    thisRect.x = mousePos.x - offsetX;
+	                    thisRect.y = mousePos.y - offsetY;
+	                }
+	                var lenght_max = circles.length;
+	 				imageObj.src="dartvader.jpg";
+		                //circunferencias
+		                kin.beginRegion();
+		                context.save();
+		                context.beginPath();
+		                context.arc(thisRect.x, thisRect.y, thisRect.radius, 0, 2 * Math.PI, false);
+		              	context.clip();
+		                context.drawImage(imageObj,thisRect.x-thisRect.radius, thisRect.y-thisRect.radius, thisRect.radius*2, thisRect.radius*2);
+		                context.restore();
+		                context.beginPath();
+		                context.arc(thisRect.x, thisRect.y, thisRect.radius, 0, 2 * Math.PI, false);
+		                context.lineWidth = 4;
+		                context.strokeStyle = "black";
+		                context.fillStyle = thisRect.color;
+		                // since we are using the destination-over composite operation,
+		                // we need to stroke the path before filling it
+		                context.stroke();
+		                context.fill();
+		                context.closePath();
+
+					//kin settings	              
+	                kin.addRegionEventListener("onmousedown", function(){
+	                    thisRect.dragging = true;
+	                    var mousePos = kin.getMousePos();
+	                    offsetX = mousePos.x - thisRect.x;
+	                    offsetY = mousePos.y - thisRect.y;
+	                });
+	                kin.addRegionEventListener("onmouseup", function(){
+	                    thisRect.dragging = false;
+	                });
+	                kin.addRegionEventListener("onmouseover", function(){
+	                    document.body.style.cursor = "pointer";
+	                });
+	                kin.addRegionEventListener("onmouseout", function(){
+	                    document.body.style.cursor = "default";
+	                });
+	 
+	                kin.closeRegion();
+	            }
+	            for (var n = 0; n < circles.length; n++) {
+	                var thisRect = circles[n];
+	                if (thisRect.dragging) {
+	                    thisRect.x = mousePos.x - offsetX;
+	                    thisRect.y = mousePos.y - offsetY;
+	                }
+	                var lenght_max = circles.length;
+	 				var count = circles.length - 1;
+	 				if(count == n){}else{
+	 					// linhas
+		 				context.beginPath();
+		                context.moveTo(thisRect.x, thisRect.y);
+					    context.lineTo(circles[n+1].x, circles[n+1].y);
+		                context.lineWidth = 4;
+		                context.strokeStyle = "black";
+		                context.stroke();
+		                context.closePath();
+	 				}
+				}
+        	});
+       	}
+       	//hitTest function
+		function hitTestObject(){
+			var breakLoop = false;
+			for (var i = 0; i < circles.length; i++) {
+				for (var j = 0; j < circles.length; j++) {
+					if (i != j){
+						if ((circles[i].x - circles[i].radius - 30) <= (circles[j].x + circles[j].radius + 30) && (circles[i].x + circles[i].radius + 30) >= (circles[j].x - circles[j].radius - 30)
+						&& (circles[i].y + circles[i].radius + 30) >= (circles[j].y - circles[j].radius - 30) && (circles[i].y - circles[i].radius - 30) <= (circles[j].y + circles[j].radius + 30)) {
+							breakLoop = true;
+							break;
+						}
+					}
+				}
+				if (breakLoop == true){break;}
+			}
+			if (breakLoop == true){initProject()}
+		}
+    }
+</script>
+</body>
+</html>

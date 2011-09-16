@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="UTF-8">
+		<title>lines</title>
+	</head>
+	<body>
+	<canvas id="mycanvas" width="600" height="600"></canvas>
+	<a href="index.html">voltar</a>
+	<script type="text/javascript">
+		window.onload = function(){
+			var canvas = document.getElementById("mycanvas");
+			var context = canvas.getContext("2d");
+			var imageObj = new Image();
+			
+			imageObj.onload = function(){
+				//salva inicial
+				context.save();
+				context.beginPath();
+				context.arc(300, 300, 300, 0, 2 * Math.PI, false);
+				context.clip();
+				//tudo até aqui é dentro da imagem
+				context.drawImage(imageObj, 0, 0, 600, 600);
+				//volta ao momento do save
+				context.restore()
+				//e da o crop com o desenho abaixo
+				context.beginPath();
+				context.arc(300, 300, 300, 0, 2 * Math.PI, false);
+				context.stroke();
+				context.closePath();
+			};
+			imageObj.src = "dartvader.jpg";
+		}
+	</script>
+	</body>
+</html>
